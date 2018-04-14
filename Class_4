@@ -1,0 +1,332 @@
+credits to: https://note.youdao.com/share/?id=5f63c1df688cba8c207e525448b83e66&type=note#/
+
+第四课：函数（下）
+一、变量
+1、局部变量
+
+1）函数内部定义的变量
+
+2）不同函数内的局部变量可以定义相同的名字，互不影响
+
+3）作用范围：函数体内有效，其他函数不能直接使用
+
+def set_name():
+    name = "zhangsan"
+    return name
+def get_name(name):
+    name = "lisi"
+    print(name)
+nm = set_name()
+get_name(nm)
+
+运行结果：
+
+lisi
+
+2、全局变量
+
+1）函数外部定义的变量
+
+2）全局变量命名建议以g_开头，如：g_name
+
+3）作用范围：可以在不同函数中使用
+
+name = "zhangsan"
+def get_name():
+    print(name)
+def get_name2():
+    print(name)
+get_name()
+get_name2()
+print(name)
+
+运行结果：
+
+zhangsan
+zhangsan
+zhangsan
+
+4）在函数体内修改全局变量： 先用global声明全局变量，再作修改。否则只会修改函数体内的参数值，在函数体外不变。
+
+age = 20
+weight = 60
+
+def change_age_weight():
+    weight = 70 #重新定义了一个局部变量weight
+    global age
+    age = 25
+    print("函数体内age=%d"%age)
+    print("函数体内weight=%d"%weight)
+
+change_age_weight()
+print("函数体外age=%d"%age)
+print("函数体外weight=%d"%weight)
+
+运行结果：
+
+函数体内age=25
+函数体内weight=70
+函数体外age=25
+函数体外weight=60
+
+如果全局变量与局部变量同名，则函数体内使用的是局部变量
+
+5）全局变量定义的位置：
+
+g_num1 = 100
+def print_global_num():
+    print("g_num1:%d"%g_num1)
+    print("g_num2:%d"%g_num2)
+    print("g_num3:%d"%g_num3)
+
+g_num2 = 200
+print_global_num()
+g_num3 = 300
+
+运行后，g_num1显示100，g_num2显示200，g_num3会报错
+
+全局变量定义的位置要在函数调用之前或函数定义之前
+
+6）字典、列表作为全局变量，在函数体内修改这种类型的全局变量中的元素不需要用global声明
+
+g_num_list = [1,2,3]
+g_info_dict = {"name":"zhangsan","age":20}
+
+def update_info():
+    g_num_list.append(4)
+    g_info_dict["gender"] = "male"
+
+update_info()
+print(g_num_list)
+print(g_info_dict)
+
+运行结果：
+
+[1, 2, 3, 4]
+{'name': 'zhangsan', 'age': 20, 'gender': 'male'}
+
+二、函数参数
+1、缺省参数
+
+1）函数定义带有初始值的形参
+
+def x_y_sum(x,y=20):
+    print("x=%d"%x)
+    print("y=%d"%y)
+    return  x + y
+print(x_y_sum(15))
+
+运行结果：
+
+x=15
+y=20
+35
+
+2）函数调用时，缺省参数可传，也可不传
+
+def x_y_sum(x,y=20):
+    return  x + y
+rs = x_y_sum(10)
+print(rs)
+rs = x_y_sum(10,30)
+print(rs)
+
+运行结果：
+
+30
+40
+
+3）缺省参数一定要位于参数列表的最后
+
+#错误的使用方法
+def x_y_sum2(y=10,x):
+    return x + y
+
+4）缺省参数数量没有限制
+2、命名参数
+
+1）调用带有参数的函数时，通过指定参数名称传入参数的值
+
+2）可以不按函数定义的参数顺序传入
+
+def x_y_sum(x=10,y=20):
+    return  x + y 
+#注意：形参的顺序可以不同，但是名称要相同。
+rs1 = x_y_sum(y=30,x=15)
+rs2 = x_y_sum(x=15)
+rs3 = x_y_sum()
+print("rs1=%d"%rs1)
+print("rs2=%d"%rs2)
+print("rs3=%d"%rs3)
+
+运行结果：
+
+rs1=45
+rs2=35
+rs3=30
+
+3、不定长参数
+
+函数可以接收不定个数的参数传入
+
+def fuction([formal_args,]*args)函数调用时，传入的不定参数会被封装成元组
+
+def any_num_sum(x,y=10,*args):
+    print("args={}".format(args))
+    rs = x + y
+    if len(args) > 0:
+        for arg in args:
+            rs += arg
+    return rs
+rs1 = any_num_sum(10,20,30,40,50)
+print(rs1)
+
+运行结果：
+
+args=(30, 40, 50)
+150
+
+改变不定长参数的位置
+
+def any_num_sum2(x,*args,y=10):
+    print("args={}".format(args))
+    print("x={}".format(x))
+    print("y={}".format(y))
+    rs = x + y
+    if len(args) > 0:
+        for arg in args:
+            rs += arg
+    return rs
+rs1 = any_num_sum2(20)
+rs2 = any_num_sum2(20,30,y=100)
+rs3 = any_num_sum2(20,30,40,50,60,y=100)
+print(rs1)
+print(rs2)
+print(rs3)
+
+运行结果：
+
+args=()
+x=20
+y=10
+args=(30,)
+x=20
+y=100
+args=(30, 40, 50, 60)
+x=20
+y=100
+30
+150
+300
+
+若不定长参数在中间，后面需要用命名参数传入，否则后面的都会传入不定长参数
+
+def fuction([formal_args,]**args)函数调用时，如果传入key=value形式的不定长参数，会被封装成字典
+
+def social_insurance_comp(basic_money,**proportion):
+    print(proportion)
+    e_money = basic_money * proportion["e"]
+    m_money = basic_money * proportion["m"]
+    a_money = basic_money * proportion["a"]
+    total_money = e_money + m_money + a_money
+    return e_money,m_money,a_money,total_money
+
+e,m,a,t = social_insurance_comp(8000,e=0.2,m=0.1,a=0.12)
+print("养老：{},医疗：{}，公积金：{}，缴费总额：{}".format(e,m,a,t))
+
+运行结果：
+
+{'e': 0.2, 'm': 0.1, 'a': 0.12}
+养老：1600.0,医疗：800.0，公积金：960.0，缴费总额：3360.0
+
+拆包
+
+对于定义了不定长参数的函数，在函数调用时需要把已定义好的元组或者列表传入到函数中，需要使用拆包方法
+
+def salary_comp(basic_money,*other_money,**proportion):
+    print("缴费基数:{}".format(basic_money))
+    print("其他工资:{}".format(other_money))
+    print("比例:{}".format(proportion))
+
+other_money = (500,200,100,1000)
+proportion_dict = {"e":0.2,"m":0.1,"a":0.12}
+#未使用拆包
+print("未使用拆包")
+salary_comp(8000,other_money,proportion_dict)
+print("--------------------------")
+print("使用拆包")
+salary_comp(8000,*other_money,**proportion_dict)
+
+运行结果：
+
+未使用拆包
+缴费基数:8000
+其他工资:((500, 200, 100, 1000), {'e': 0.2, 'm': 0.1, 'a': 0.12})
+比例:{}
+--------------------------
+使用拆包
+缴费基数:8000
+其他工资:(500, 200, 100, 1000)
+比例:{'e': 0.2, 'm': 0.1, 'a': 0.12}
+
+三、递归函数
+
+函数调用自身。 如：阶乘
+
+def recursive(num):
+    if num > 1:
+        return num * recursive(num -1)
+    else:
+        return num
+print(recursive(3))
+
+运行结果：
+
+6
+
+注意：递归过程中要有用于结束递归的判断
+四、匿名函数
+
+用lambda关键字创建匿名函数
+
+匿名函数定义：
+
+lambda [参数列表]:表达式
+
+匿名函数可以作为参数被传入其他函数
+
+sum = lambda x,y:x+y
+print(sum(10,20))
+#等价函数
+def sum(x,y):
+    return x + y
+
+（1）匿名函数作为参数传入到自定义函数中
+
+def x_y_comp(x,y,func):
+    rs = func(x,y)
+    print(rs)
+
+x_y_comp(3,5,lambda x,y:x+y)
+print("----------------")
+x_y_comp(4,7,lambda x,y:x*y)
+
+运行结果：
+
+8
+----------------
+28
+
+（2）匿名函数作为python内置函数的参数使用
+
+#按age大小排序
+user_infos = [{"name":"zhangsan","age":20},{"name":"lisi","age":30},{"name":"wangwu","age":18}]
+print(user_infos)
+user_infos.sort(key=lambda info:info["age"],reverse=True)
+print(user_infos)
+
+运行结果：
+
+[{'name': 'zhangsan', 'age': 20}, {'name': 'lisi', 'age': 30}, {'name': 'wangwu', 'age': 18}]
+[{'name': 'wangwu', 'age': 18}, {'name': 'zhangsan', 'age': 20}, {'name': 'lisi', 'age': 30}]
+
