@@ -1,0 +1,170 @@
+credits to http://wenda.chinahadoop.cn/article/667
+
+Python人工智能基础篇-第三课笔记
+元组、字典、函数（上）
+1、元组
+
+    * 顺序存储相同/不同类型的元素
+    * 元组定义，使用()将元素括起来，元素之间用','隔开
+    * 特性：不可变。不支持添加、修改、删除元素操作
+    * 查询：通过下标查询元组制定位置的元素
+
+1.1 元组定义
+
+    db_info = ("192.168.10.1",3306,"root","root123")
+
+1.2 定义只有一个元素的元组
+
+    one_tuple = ("zhangsan",)
+
+1.3 循环遍历元组
+
+    for item in db_info:
+        print(item)
+
+2、字典
+
+    * 存储key-value键值对类型的数据
+    * 字典定义：{key:value1,key2:value2}
+    * 查询：可以使用key查找value
+    * 字典有添加、删除、修改操作
+    * 内置方法有get/keys/values/items/clear
+    * 通过循环遍历字典
+
+2.1 字典定义
+
+    user_info_dict = {"name":"悟空","age":100,"gender":"male","job":"取经"}
+
+2.2 字典添加
+
+    user_info_dict["tel"] = "13812345567"
+
+2.3 字典修改
+
+    user_info_dict["tel"]  = "13932342322"
+
+2.4 清空字典
+
+    user_info_dict.clear()
+
+3、集合set
+
+    * 无序存储不同数据类型不重复元素的序列
+    * 集合定义：name_set={"zhangsan","lisi","wangwu"}
+    * 使用set(序列)对序列中元素去重name_set=set(["zhangsan","lisi","wangwu"])
+    * 创建空set:  none_set=set()
+
+3.1 定义集合
+
+    student_set = {"zhansan","lisi","wangwu"}
+
+3.2 集合对列表去重
+
+    string_set = set("hello")
+    print(string_set)   #输出结果为{'l', 'e', 'h', 'o'}
+
+3.3 创建一个空集合
+
+    none_set = set() #空集合
+
+4、集合set一些方法
+
+    * 使用In/not in判断一个元素在set序列中是否存在
+    * 使用add(元素)-添加一个元素到集合
+    * update(序列)-将一个序列的元素添加到集合中并去重
+    * remove（元素）-根据元素删除指定元素，元素不存在则报错
+    * discard（元素）-根据元素删除指定元素，元素不存在不会报错
+    * pop(元素)-随机删除集合中的某个元素，并返回被删除的元素
+    * clear() 清空集合
+    * 集合操作
+        * 交集 &amp;
+        * 并集 |
+        * 差集 -
+        * 对称差集 ^
+
+4.1 添加元素到集合-add
+
+    student_set.add("wangwu1")
+
+4.2 移除元素-remove
+
+    student_set.remove("wangwu1")
+
+4.2 修改元素-update
+
+    student_set.update(["悟空","八戒"],["张飞","李逵"])
+
+4.3 pop()随机删除集合中的某个元素，并返回被删除的元素
+
+    name = student_set.pop()
+
+4.4 交集
+
+     num_set1 = {1,2,4,7}
+     num_set2 = {2,5,8,9}
+     inter_set1 = num_set1 &amp; num_set2
+     inter_set2 = num_set1.intersection(num_set2)
+     print(inter_set1) //输出结果{2}
+     print(inter_set2) //输出结果{2}
+
+4.5 并集
+
+    num_set1 = {1,2,4,7}
+    num_set2 = {2,5,8,9}
+    union_set1 = num_set1 | num_set2
+    union_set2 = num_set1.union(num_set2)
+    print(union_set1) //输出结果{1,2,4,5,7,8,9}
+    print(union_set2) //输出结果{1,2,4,5,7,8,9}
+
+4.6 差集
+
+    num_set1 = {1,2,4,7}
+    num_set2 = {2,5,8,9}
+    diff_set1 = num_set1 - num_set2
+    diff_set2 = num_set1.difference(num_set2)
+    print(diff_set1) //输出结果{1,4,7}
+    print(diff_set2) //输出结果{1,4,7}
+
+4.7 对称差集
+
+    num_set1 = {1,2,4,7}
+    num_set2 = {2,5,8,9}
+    sym_diff_set1 = num_set1 ^ num_set2
+    sym_diff_set2 = num_set1.symmetric_difference(num_set2)
+    print(sym_diff_set1) //输出结果{1,4,5,7,8,9}
+    print(sym_diff_set2) //输出结果{1,4,5,7,8,9}
+
+5、函数
+
+    * 可以理解为实现某个功能封装
+    * 函数定义语法：
+            def 函数名称 （参数）:
+                    函数体代码
+                    return 返回值
+    * 函数调用：函数名（参数）
+    * 函数参数
+        * 形参：定义函数时设置的参数
+        * 实参：调用函数时传入的参数
+
+5.1 函数实例
+
+    实例代码：
+    def check_letter_exist(pwd_str):
+        """
+            判断字符串是否含有字母
+        "" "
+        has_letter = False
+        for c in pwd_str:
+            if c.isalpha():
+                has_letter= True
+                break
+        return has_letter
+
+6、字符串常用内置方法
+
+    * find(str[,start,end]) -在字符串中查找指定子字符串是否存在，如果存在则返回第一个子字符串的起始下标，如果不存在则返回-1
+    * count(str[,start,end])-在字符串中统计包含的子字符串的个数
+    * replace（old,new）使用新的字符串替换指定的子字符串，返回新的字符串
+    * split(sep[,maxsplit])
+    * uper()：字符串所有字符大写
+    * lower（）:字符串所有字符小写
